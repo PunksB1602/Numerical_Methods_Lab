@@ -1,0 +1,91 @@
+#include<stdio.h>
+#define max 10
+int main()
+{
+    float a[max][max],L[max][max],U[max][max],b[max],X[max],Y[max];
+    int i,j,k,n;
+    printf("\t******SOLUTION OF LINEAR EQUATIONS USING DO-LITTLE METHOD******");
+    printf("\n\tEnter the number of unknowns: ");
+    scanf("%d",&n);
+    printf("\tEnter the elements of the augmented matrix row-wise:\n");
+    for(i=0;i<n;i++)
+    {
+        printf("\t");
+        for(j=0;j<n;j++)
+        {
+            scanf("%f",&a[i][j]);
+        }
+        scanf("%f",&b[i]);
+    }
+   for(i=0;i<n;i++)
+   {
+       for(j=0;j<n;j++)
+       {
+           if(i<=j)
+           {
+               U[i][j]=a[i][j];
+               for(k=0;k<i;k++)
+                U[i][j]=U[i][j]-L[i][k]*U[k][j];
+               if(i==j)
+                L[i][j]=1;
+                else
+                L[i][j]=0;
+           }
+           else
+           {
+               if(U[j][j]==0)
+               {
+                   printf("\n\tError! Pivot element is zero");
+               }
+            L[i][j]=a[i][j];
+            for(k=0;k<j;k++)
+            L[i][j]=L[i][j]-L[i][k]*U[k][j];
+            L[i][j]=L[i][j]/U[j][j];
+            U[i][j]=0;
+           }
+       }
+   }
+   printf("\n\t[L]:\n");
+   for(i=0;i<n;i++)
+   {
+       for(j=0;j<n;j++)
+       {
+        printf("\t%f\t",L[i][j]);
+       }
+    printf("\n");
+   }
+   printf("\n\t[U]:\n");
+   for(i=0;i<n;i++)
+   {
+       for(j=0;j<n;j++)
+       {
+        printf("\t%f\t",U[i][j]);
+       }
+    printf("\n");
+   }
+   for(i=0;i<n;i++)
+   {
+       Y[i]=b[i];
+       for(j=0;j<i;j++)
+        Y[i]=Y[i]-L[i][j]*Y[j];
+   }
+   printf("\n\t[Y]:");
+   for(i=0;i<n;i++)
+   {
+       printf("\n\ty%d=%f",i+1,Y[i]);
+   }
+   for(i=n-1;i>=0;i--)
+   {
+       X[i]=Y[i];
+       for(j=i+1;j<n;j++)
+       {
+           X[i]=X[i]-U[i][j]*X[j];
+       }
+       X[i]=X[i]/U[i][i];
+   }
+   printf("\n\n\t[X]:");
+   for(i=0;i<n;i++)
+   {
+       printf("\n\tx%d=%f",i+1,X[i]);
+   }
+}
